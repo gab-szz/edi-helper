@@ -1,6 +1,7 @@
 import { ipcMain } from "electron";
 import fs from "node:fs";
 import { env } from "./env.js";
+import { extrairDadosEDI } from "./neogrid_edi.js";
 
 export function registerIpcHandlers() {
   ipcMain.handle("importar-arquivos", async (_event, caminho) => {
@@ -8,13 +9,15 @@ export function registerIpcHandlers() {
 
     try {
       const arquivos = await fs.promises.readdir(caminho);
-      console.log("Arquivos encontrados:", arquivos);
 
       const arquivosEDI = arquivos.filter((arquivo) =>
         arquivo.endsWith(".txt")
       );
       console.log("Arquivos EDI encontrados:", arquivosEDI);
-      return arquivosEDI;
+
+      const listaPedidos = extrairDadosEDI(caminho, arquivosEDI);
+
+      return listaPedidos;
     } catch (error) {
       console.error("Erro ao importar arquivos EDI:", error);
       throw new Error("Erro ao importar arquivos EDI.");

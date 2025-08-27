@@ -102,7 +102,7 @@ table {
   border-collapse: collapse;
 }
 
-td:hover {
+tr:hover {
   background-color: #ebebeb;
   transition: 0.5s;
 }

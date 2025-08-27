@@ -37,7 +37,9 @@ function importarArquivosEDI() {
       resultado.forEach((element) => {
         const row = document.createElement("tr");
         row.innerHTML = `
-          <td>${element}</td>
+          <td>${element.arquivo}</td>
+          <td>${element.numpedcli}</td>
+          <td>${element.datahora}</td>
         `;
         tbody.appendChild(row);
       });
