@@ -9,6 +9,8 @@ export async function buscarNumeroPedidoEDI(numeroPedido) {
       { outFormat: connection.OUT_FORMAT_OBJECT }
     );
 
+    console.log("Resultado da consulta:", result);
+
     return result.rows && result.rows.length > 0 ? result.rows[0] : null;
   } catch (error) {
     console.error("Erro ao buscar número do pedido EDI:", error);
