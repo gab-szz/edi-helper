@@ -5,8 +5,8 @@ import { Buffer } from "buffer"; // É uma classe global, mas é boa prática im
 // 28 47 - data hora do pedido
 
 export async function extrairDadosEDI(caminho, arquivos) {
-  let listaDePedidos = [];
-  for (const arquivo of arquivos) {
+  // 1. Cria um array de promessas
+  const promessasDeLeitura = arquivos.map(async (arquivo) => {
     const caminhoCompleto = `${caminho}\\${arquivo}`;
     let fileHandle;
 
@@ -14,33 +14,37 @@ export async function extrairDadosEDI(caminho, arquivos) {
       fileHandle = await fs.open(caminhoCompleto, "r");
       const bufferNumpedcli = Buffer.alloc(20);
       const bufferDataHora = Buffer.alloc(9);
+
+      // Lê os dados do arquivo
       await fileHandle.read(bufferNumpedcli, 0, bufferNumpedcli.length, 7);
       await fileHandle.read(bufferDataHora, 0, bufferDataHora.length, 47);
 
       const numpedcliExtraido = bufferNumpedcli.toString("utf8").trim();
       const datahoraExtraida = bufferDataHora.toString("utf8").trim();
 
-      // Aqui você imprime o que foi buscado
-      console.log(
-        `Dados extraídos de ${arquivo}: ${numpedcliExtraido} - ${datahoraExtraida}`
-      );
-
-      const dadosDoPedido = {
+      // Retorna o objeto com os dados para cada promessa
+      return {
         arquivo: arquivo,
         numpedcli: numpedcliExtraido,
         datahora: datahoraExtraida,
       };
-
-      listaDePedidos.push(dadosDoPedido);
     } catch (error) {
       console.error(`Erro ao processar ${arquivo}:`, error);
+      return null; // Retorna null em caso de erro
     } finally {
       if (fileHandle) {
         await fileHandle.close();
       }
     }
-  }
-  console.log(listaDePedidos);
+  });
+
+  // 2. Aguarda todas as promessas serem concluídas em paralelo
+  const resultados = await Promise.all(promessasDeLeitura);
+
+  // Filtra os resultados para remover possíveis erros (nulls)
+  const listaDePedidos = resultados.filter(Boolean);
+
+  console.log("Processamento concluído.");
   return listaDePedidos;
 }
 

@@ -13,7 +13,6 @@ export function registerIpcHandlers() {
       const arquivosEDI = arquivos.filter((arquivo) =>
         arquivo.endsWith(".txt")
       );
-      console.log("Arquivos EDI encontrados:", arquivosEDI);
 
       const listaPedidos = extrairDadosEDI(caminho, arquivosEDI);
 
