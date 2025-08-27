@@ -1,5 +1,8 @@
 import fs from "fs";
 
+// 8 27 - pedido comprador
+// 28 47 - data hora do pedido
+
 export async function processarArquivoEDI(caminho, arquivos) {
   console.log(`Processando arquivos EDI no caminho: ${caminho}`);
 
