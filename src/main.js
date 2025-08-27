@@ -10,7 +10,7 @@ const __dirname = dirname(__filename);
 
 // Mantenha a referência da janela principal para que ela não seja coletada
 let win;
-const fixedWidth = 500;
+const fixedWidth = 600;
 const fixedHeight = 500;
 
 // Criação da janela principal

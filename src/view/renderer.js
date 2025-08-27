@@ -27,13 +27,15 @@ function importarArquivosEDI() {
       console.log("Resultado da importação:", resultado);
 
       const tabelaArquivos = document.getElementById("table-data");
+      const tbody = document.querySelector(".table-body");
+      tbody.innerHTML = "";
 
       resultado.forEach((element) => {
         const row = document.createElement("tr");
         row.innerHTML = `
           <td>${element}</td>
         `;
-        tabelaArquivos.appendChild(row);
+        tbody.appendChild(row);
       });
     })
     .catch((erro) => {

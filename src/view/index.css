@@ -83,3 +83,26 @@ h1 {
   padding: 10px;
   min-height: 0; /* Importante para flexbox */
 }
+
+.table-header {
+  text-align: center;
+}
+
+table,
+th,
+td {
+  border: 1px solid #000000;
+  padding: 4px;
+  margin: 0 auto;
+  font-size: 10px;
+  text-align: center;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+td:hover {
+  background-color: #ebebeb;
+  transition: 0.5s;
+}

@@ -1,6 +1,6 @@
-# Electron Base App
+# EDI Helper
 
-Aplicação base criada com [Electron.js](https://www.electronjs.org/) para desktop, com foco em simplicidade, segurança e organização. Ideal como ponto de partida para novos projetos.
+Aplicação simples criada com [Electron.js](https://www.electronjs.org/) para desktop, com foco em simplicidade, segurança e organização. Criado com o objetivo de obter informações de um arquivo EDI, consultar informações de importação em um banco de dados e gerar relatório com as informações obtidas..
 
 ---
 

@@ -17,6 +17,8 @@
     "nodemon": "^3.1.10"
   },
   "dependencies": {
-    "oracledb": "^6.9.0"
+    "dotenv": "^17.2.1",
+    "oracledb": "^6.9.0",
+    "zod": "^4.1.3"
   }
 }
