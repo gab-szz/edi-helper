@@ -1,6 +1,6 @@
 import { ipcMain } from "electron";
 import fs from "node:fs";
-import { env } from "./env.js";
+import { env } from "./config/env.js";
 import { extrairDadosEDI } from "./neogrid_edi.js";
 
 export function registerIpcHandlers() {
