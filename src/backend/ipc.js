@@ -1,8 +1,9 @@
 import { ipcMain } from "electron";
 import fs from "node:fs";
+import { env } from "./env.js";
 
 export function registerIpcHandlers() {
-  ipcMain.handle("importar-arquivos", async (event, caminho) => {
+  ipcMain.handle("importar-arquivos", async (_event, caminho) => {
     console.log("Importando arquivos EDI de:", caminho);
 
     try {
@@ -21,4 +22,5 @@ export function registerIpcHandlers() {
   });
   // Outros handlers podem ser adicionados aqui
   ipcMain.handle("ping", () => "pong, pong");
+  ipcMain.handle("caminho-edi", () => env.CAMINHO_EDI);
 }

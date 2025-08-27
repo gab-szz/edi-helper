@@ -3,6 +3,10 @@ window.api.ping().then((res) => console.log(res));
 
 // Aguarda o documento HTML ser totalmente carregado
 document.addEventListener("DOMContentLoaded", () => {
+  window.api.caminhoEdi().then((caminho) => {
+    document.querySelector(".src-file-input").value = caminho;
+  });
+
   const submitButton = document.querySelector(".submit-button");
 
   submitButton.addEventListener("click", () => {
