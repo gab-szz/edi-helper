@@ -1,0 +1,22 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "main": "src/main.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon --exec \"electron .\" --watch ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "electron": "^37.3.1",
+    "electron-reload": "^2.0.0-alpha.1",
+    "nodemon": "^3.1.10"
+  },
+  "dependencies": {
+    "oracledb": "^6.9.0"
+  }
+}

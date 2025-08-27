@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src-elem 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com"
+    />
+    <meta
+      http-equiv="X-Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+    />
+    <link rel="stylesheet" href="index.css" />
+    <title>Analisador de arquivos EDI</title>
+  </head>
+  <body>
+    <div class="container-superior">
+      <div class="src-file">
+        <label class="src-file-label">Caminho dos arquivos EDI:</label>
+        <input
+          class="src-file-input"
+          type="text"
+          placeholder="Digite o caminho do arquivo EDI"
+          value="\\10.10.10.7\files$\Apoio Comercial\EDI\importacao"
+        />
+      </div>
+
+      <div class="src-options">
+        <label
+          ><input type="checkbox" name="formato" value="x12" /> Incluir arquivos
+          .BAK</label
+        >
+        <div class="div-submit">
+          <button class="submit-button">Importar</button>
+        </div>
+      </div>
+    </div>
+    <div class="container-inferior">
+      <table id="table-data">
+        <thead>
+          <tr>
+            <th>Nome do arquivo</th>
+            <th>Numero do pedido</th>
+          </tr>
+        </thead>
+        <tbody class="table-body"></tbody>
+    </div>
+  </body>
+  <script src="renderer.js"></script>
+</html>

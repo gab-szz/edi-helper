@@ -1,0 +1,85 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
+
+* {
+  padding: 0;
+  margin: 0;
+  font-size: 12px;
+}
+
+html {
+  height: 100%;
+  font-family: "Open Sans", sans-serif;
+  background-color: #f4f4f4;
+}
+
+body,
+html {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+h1 {
+  font-size: 5vw;
+  text-align: center;
+}
+
+.container-superior {
+  background-color: #ebebeb;
+  border-bottom: 1px solid #ccc;
+  box-shadow: 0 2px 5px rgba(106, 106, 106, 0.1);
+  padding: 10px;
+  display: flex;
+}
+
+.src-options {
+  flex-basis: 30%;
+  flex-grow: 1;
+}
+
+.src-file {
+  flex-basis: 70%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.src-file-input {
+  width: 90%;
+  padding: 1px;
+}
+
+.div-submit {
+  margin-top: 4px;
+  display: flex;
+  margin-left: 20px;
+}
+
+.submit-button {
+  background-color: #0044ff;
+  color: white;
+  border: 1px solid #002999;
+  border-radius: 5px;
+  padding: 4px 12px;
+  display: block;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background-color: #000988;
+  transition: 1s;
+}
+
+.container-inferior {
+  flex: 1; /* Ocupa o restante do espaço */
+  overflow-y: auto; /* Barra de rolagem só aqui */
+  background: #fff;
+  border-top: 1px solid #ccc;
+  padding: 10px;
+  min-height: 0; /* Importante para flexbox */
+}
