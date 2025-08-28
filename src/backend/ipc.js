@@ -11,6 +11,7 @@ export function registerIpcHandlers() {
     try {
       const arquivos = await fs.promises.readdir(caminho);
 
+      let arquivosEDIExtrair = [];
       const arquivosEDI = arquivos.filter((arquivo) => {
         if (incluirBak) {
           return arquivo.endsWith(".BAK") || arquivo.endsWith(".txt");
@@ -19,20 +20,24 @@ export function registerIpcHandlers() {
         }
       });
 
-      const listaPedidos = await extrairDadosEDI(caminho, arquivosEDI);
-      let listaPedidosConsulta = [];
+      if (arquivosEDI.length === 0) {
+        throw new Error("Nenhum arquivo EDI encontrado.");
+      } else if (arquivosEDI.length > 100) {
+        console.log("Consulta limitada a 100 elementos.");
+        arquivosEDIExtrair = arquivosEDI.slice(0, 100);
+      } else {
+        arquivosEDIExtrair = arquivosEDI;
+      }
+
+      const listaPedidos = await extrairDadosEDI(caminho, arquivosEDIExtrair);
 
       // 2. Mapeia a lista de pedidos para um array de Promessas de consulta ao banco de dados
       console.log("Iniciando consulta de pedidos EDI...");
       if (listaPedidos.length === 0) {
         throw new Error("Nenhum arquivo encontrado pra consulta.");
-      } else if (listaPedidos.length > 100) {
-        listaPedidosConsulta = listaPedidos.slice(0, 100);
-      } else {
-        listaPedidosConsulta = listaPedidos;
       }
 
-      const promessasDeConsulta = listaPedidosConsulta.map(async (pedido) => {
+      const promessasDeConsulta = listaPedidos.map(async (pedido) => {
         const resultadoConsulta = await buscarNumeroPedidoEDI(
           pedido.numpedcli,
           pedido.arquivo
