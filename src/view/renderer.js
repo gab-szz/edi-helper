@@ -1,4 +1,5 @@
 // @ts-nocheck
+import {} from "./js/";
 window.api.ping().then((res) => console.log(res));
 
 // Aguarda o documento HTML ser totalmente carregado

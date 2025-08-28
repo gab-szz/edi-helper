@@ -4,6 +4,7 @@ import fs from "node:fs";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import { registerIpcHandlers } from "./backend/ipc.js";
+import { env } from "./backend/config/env.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -52,42 +53,47 @@ app.on("window-all-closed", () => {
   }
 });
 
-// --- SOLUÇÃO DE RELOAD OTIMIZADA ---
-// Função de debounce para evitar múltiplos recarregamentos rápidos
-function debounce(func, timeout = 300) {
-  let timer;
-  return (...args) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      func.apply(this, args);
-    }, timeout);
-  };
-}
-
-// O caminho para a pasta que queremos observar
-const pathToWatch = path.join(__dirname, "view");
-
-// A função que vai recarregar a janela
-const reloadWindow = debounce(() => {
-  console.log(`Recarregando a janela...`);
-  if (win) {
-    win.reload();
+// ---------------------------------------------
+// APENAS PARA O AMBIENTE DE DESENVOLVIMENTO
+// O watcher não deve ser ativado em builds de produção
+if (env.NODE_ENV === "desenvolvimento") {
+  // --- SOLUÇÃO DE RELOAD OTIMIZADA ---
+  // Função de debounce para evitar múltiplos recarregamentos rápidos
+  function debounce(func, timeout = 300) {
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        func.apply(this, args);
+      }, timeout);
+    };
   }
-}, 500); // 500ms de atraso para evitar múltiplos reloads
 
-// Observar a pasta do projeto
-const watcher = fs.watch(pathToWatch, (eventType, filename) => {
-  if (filename) {
-    const fileExtension = path.extname(filename).toLowerCase();
-    // Recarregamos para qualquer mudança em arquivos .html, .css ou .js no diretório
-    if ([".html", ".css", ".js"].includes(fileExtension)) {
-      reloadWindow();
+  // O caminho para a pasta que queremos observar
+  const pathToWatch = path.join(__dirname, "view");
+
+  // A função que vai recarregar a janela
+  const reloadWindow = debounce(() => {
+    console.log(`Recarregando a janela...`);
+    if (win) {
+      win.reload();
     }
-  }
-});
+  }, 500); // 500ms de atraso para evitar múltiplos reloads
 
-// Garante que o watcher seja fechado quando o app for fechado
-app.on("before-quit", () => {
-  watcher.close();
-  console.log("Watcher de arquivos fechado.");
-});
+  // Observar a pasta do projeto
+  const watcher = fs.watch(pathToWatch, (eventType, filename) => {
+    if (filename) {
+      const fileExtension = path.extname(filename).toLowerCase();
+      // Recarregamos para qualquer mudança em arquivos .html, .css ou .js no diretório
+      if ([".html", ".css", ".js"].includes(fileExtension)) {
+        reloadWindow();
+      }
+    }
+  });
+
+  // Garante que o watcher seja fechado quando o app for fechado
+  app.on("before-quit", () => {
+    watcher.close();
+    console.log("Watcher de arquivos fechado.");
+  });
+}

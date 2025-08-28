@@ -2,6 +2,7 @@ import "dotenv/config";
 import z from "zod";
 
 const envSchema = z.object({
+  NODE_ENV: z.string().min(5).max(50),
   CAMINHO_EDI: z.string().min(5).max(100),
   HOST_ORACLE: z.string().min(5).max(100),
   PORTA_ORACLE: z.coerce.number(),
