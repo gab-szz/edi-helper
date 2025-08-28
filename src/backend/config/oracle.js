@@ -6,9 +6,9 @@ oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
 
 export async function conectar() {
   return await oracledb.getConnection({
-    user: env.USUARIO_ORACLE,
-    password: env.SENHA_ORACLE,
-    connectionString: `${env.HOST_ORACLE}:${env.PORTA_ORACLE}/${env.NOME_ORACLE}`,
+    user: env.USUARIO_BD,
+    password: env.SENHA_BD,
+    connectionString: `${env.HOST_BD}:${env.PORTA_BD}/${env.NOME_BD}`,
   });
 }
 

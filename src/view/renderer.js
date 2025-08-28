@@ -1,11 +1,16 @@
 // @ts-nocheck
-import {} from "./js/";
 window.api.ping().then((res) => console.log(res));
 
 // Aguarda o documento HTML ser totalmente carregado
 document.addEventListener("DOMContentLoaded", () => {
+  console.log("teste");
   window.api.caminhoEdi().then((caminho) => {
-    document.querySelector(".src-file-input").value = caminho;
+    console.log("Valor recebido do IPC:", caminho); // Adicione esta linha
+    if (caminho) {
+      document.querySelector(".src-file-input").value = caminho;
+    } else {
+      console.error("O caminho recebido é inválido ou vazio.");
+    }
   });
 
   const submitButton = document.querySelector(".submit-button");

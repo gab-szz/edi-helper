@@ -14,6 +14,11 @@ let win;
 const fixedWidth = 600;
 const fixedHeight = 500;
 
+// 🚨 Desabilita a GPU para evitar crash em servidores/RDP
+app.disableHardwareAcceleration();
+app.commandLine.appendSwitch("disable-gpu");
+app.commandLine.appendSwitch("no-sandbox");
+
 // Criação da janela principal
 const createWindow = () => {
   win = new BrowserWindow({
