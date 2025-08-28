@@ -1,11 +1,12 @@
-import { conectar, desconectar } from "./config/oracle";
+import { conectar, desconectar } from "./config/oracle.js";
 
-export async function buscarNumeroPedidoEDI(numeroPedido) {
+export async function buscarNumeroPedidoEDI(numeroPedido, arquivo) {
   const connection = await conectar();
   try {
     const result = await connection.execute(
-      `SELECT numped FROM PCFORNEC WHERE numpedcli = :numpedcli`,
-      { numpedcli: numeroPedido },
+      `SELECT numped FROM pcpedc WHERE numpedcli = :numpedcli and (obs1 like '%PEDIDO RECEBIDO VIA MERCADOR%' or obs2 like :arquivo)`,
+      { numpedcli: numeroPedido, arquivo: `%${arquivo}%.txt` },
+      // @ts-ignore
       { outFormat: connection.OUT_FORMAT_OBJECT }
     );
 

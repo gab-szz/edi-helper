@@ -2,24 +2,65 @@ import { ipcMain } from "electron";
 import fs from "node:fs";
 import { env } from "./config/env.js";
 import { extrairDadosEDI } from "./neogrid_edi.js";
+import { buscarNumeroPedidoEDI } from "./repository.js";
 
 export function registerIpcHandlers() {
-  ipcMain.handle("importar-arquivos", async (_event, caminho) => {
+  ipcMain.handle("importar-arquivos", async (_event, caminho, incluirBak) => {
     console.log("Importando arquivos EDI de:", caminho);
 
     try {
       const arquivos = await fs.promises.readdir(caminho);
 
-      const arquivosEDI = arquivos.filter((arquivo) =>
-        arquivo.endsWith(".txt")
+      const arquivosEDI = arquivos.filter((arquivo) => {
+        if (incluirBak) {
+          return arquivo.endsWith(".BAK") || arquivo.endsWith(".txt");
+        } else {
+          return arquivo.endsWith(".txt");
+        }
+      });
+
+      const listaPedidos = await extrairDadosEDI(caminho, arquivosEDI);
+      let listaPedidosConsulta = [];
+
+      // 2. Mapeia a lista de pedidos para um array de Promessas de consulta ao banco de dados
+      console.log("Iniciando consulta de pedidos EDI...");
+      if (listaPedidos.length === 0) {
+        throw new Error("Nenhum arquivo encontrado pra consulta.");
+      } else if (listaPedidos.length > 100) {
+        listaPedidosConsulta = listaPedidos.slice(0, 100);
+      } else {
+        listaPedidosConsulta = listaPedidos;
+      }
+
+      const promessasDeConsulta = listaPedidosConsulta.map(async (pedido) => {
+        const resultadoConsulta = await buscarNumeroPedidoEDI(
+          pedido.numpedcli,
+          pedido.arquivo
+        );
+
+        // 3. Anexa o numped do banco de dados ao objeto do pedido
+        const numpedEncontrado = resultadoConsulta
+          ? resultadoConsulta.NUMPED
+          : null;
+
+        return {
+          ...pedido,
+          numped: numpedEncontrado != "null" ? numpedEncontrado : null,
+        };
+      });
+
+      // 4. Aguarda que todas as promessas de consulta sejam resolvidas em paralelo
+      const listaPedidosComNumped = await Promise.all(promessasDeConsulta);
+
+      console.log(
+        "Lista de pedidos atualizada com os NUMPEDs:",
+        listaPedidosComNumped
       );
 
-      const listaPedidos = extrairDadosEDI(caminho, arquivosEDI);
-
-      return listaPedidos;
+      return listaPedidosComNumped;
     } catch (error) {
       console.error("Erro ao importar arquivos EDI:", error);
-      throw new Error("Erro ao importar arquivos EDI.");
+      throw new Error(error);
     }
   });
   // Outros handlers podem ser adicionados aqui

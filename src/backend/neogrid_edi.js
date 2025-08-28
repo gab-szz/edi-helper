@@ -12,11 +12,11 @@ export async function extrairDadosEDI(caminho, arquivos) {
 
     try {
       fileHandle = await fs.open(caminhoCompleto, "r");
-      const bufferNumpedcli = Buffer.alloc(20);
+      const bufferNumpedcli = Buffer.alloc(19);
       const bufferDataHora = Buffer.alloc(9);
 
       // Lê os dados do arquivo
-      await fileHandle.read(bufferNumpedcli, 0, bufferNumpedcli.length, 7);
+      await fileHandle.read(bufferNumpedcli, 0, bufferNumpedcli.length, 8);
       await fileHandle.read(bufferDataHora, 0, bufferDataHora.length, 47);
 
       const numpedcliExtraido = bufferNumpedcli.toString("utf8").trim();

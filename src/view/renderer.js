@@ -18,6 +18,7 @@ function importarArquivosEDI() {
   console.log("Importando arquivos EDI...");
 
   const caminho = document.querySelector(".src-file-input").value;
+  const incluirBak = document.getElementById("incluir-bak").checked;
 
   if (caminho) {
     console.log("Diretório definido:", caminho);
@@ -26,7 +27,7 @@ function importarArquivosEDI() {
   }
 
   window.api
-    .importarArquivos(caminho)
+    .importarArquivos(caminho, incluirBak)
     .then((resultado) => {
       console.log("Resultado da importação:", resultado);
 
@@ -40,12 +41,13 @@ function importarArquivosEDI() {
           <td>${element.arquivo}</td>
           <td>${element.numpedcli}</td>
           <td>${element.datahora}</td>
+          <td>${element.numped !== null ? element.numped : ""}</td>
         `;
         tbody.appendChild(row);
       });
     })
     .catch((erro) => {
       console.error("Erro ao importar arquivos EDI:", erro);
-      alert("Erro ao importar arquivos EDI: " + erro);
+      alert(erro);
     });
 }
